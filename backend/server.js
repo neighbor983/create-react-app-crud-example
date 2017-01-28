@@ -1,20 +1,32 @@
 import express from 'express';
 import mongodb from 'mongodb';
 
-const dbUrl = 'mongodb://localhost/crudwithredux';
+const Uri = process.env.IP;
+
+const dbUrl = 'mongodb://'+ Uri +'/crudwithredux';
 
 const Port = process.env.PORT || 8080;
 const app = express();
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
-mongodb.MongoClient.connect(dbUrl, function(err, cb){
+mongodb.MongoClient.connect(dbUrl, function(err, db){
+    
+    var collection = db.collection('games');
     
     app.get('/api/games', function(req, res){
-       db.collection('games')
+        console.log('games api called');
+       collection
        .find({})
        .toArray(function(err, games){
+           console.log({games});
            res.json({games});
-       }) 
+           db.close();
+       });
     });
     
     app.listen(Port, () => console.log("listening on port "+ Port));
