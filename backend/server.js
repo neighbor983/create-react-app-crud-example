@@ -14,6 +14,14 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use((req,res,next) => {
+    res.status(404).json({
+        errors: {
+            global: 'Something went wrong.'
+        }
+    });
+});
+
 mongodb.MongoClient.connect(dbUrl, function(err, db){
     
     var collection = db.collection('games');
