@@ -5,6 +5,10 @@ import {
 }
 from 'react-redux';
 import {
+    Redirect
+}
+from 'react-router';
+import {
     saveGame
 }
 from './actions';
@@ -14,7 +18,8 @@ class GameForm extends React.Component {
         title: '',
         cover: '',
         errors: {},
-        loading: false
+        loading: false,
+        done: false
     }
 
     handleChange = (e) => {
@@ -43,15 +48,25 @@ class GameForm extends React.Component {
         this.setState({
             errors
         });
-        const isValid = Object.keys(errors).length === 0;
+        const isValid = Object.keys(errors).length === 0
 
         if (isValid) {
-            const { title, cover } = this.state;
-            
-            this.setState({ loading: true });
-            
-            this.props.saveGame({ title, cover }).then(
-                () => {},
+            const {
+                title,
+                cover
+            } = this.state;
+            this.setState({
+                loading: true
+            });
+            this.props.saveGame({
+                title,
+                cover
+            }).then(
+                () => {
+                    this.setState({
+                        done: true
+                    })
+                },
                 (err) => err.response.json().then(({
                     errors
                 }) => this.setState({
@@ -63,11 +78,11 @@ class GameForm extends React.Component {
     }
 
     render() {
-        return (
-            <form className={classnames('ui', 'form', { loading: this.state.loading})} onSubmit={this.handleSubmit}>
+        const form = (
+            <form className={classnames('ui', 'form', { loading: this.state.loading })} onSubmit={this.handleSubmit}>
         <h1>Add new game</h1>
-        
-        {!!this.state.errors.global && <div className='ui negative message'><p>{this.state.errors.global}</p></div>}
+
+        {!!this.state.errors.global && <div className="ui negative message"><p>{this.state.errors.global}</p></div>}
 
         <div className={classnames('field', { error: !!this.state.errors.title})}>
           <label htmlFor="title">Title</label>
@@ -99,6 +114,11 @@ class GameForm extends React.Component {
           <button className="ui primary button">Save</button>
         </div>
       </form>
+        );
+        return (
+            <div>
+        { this.state.done ? <Redirect to="/games" /> : form }
+      </div>
         );
     }
 }

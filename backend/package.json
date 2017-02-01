@@ -4,10 +4,12 @@
   "main": "index.js",
   "repository": {},
   "license": "MIT",
-  "scripts":{
+  "scripts": {
     "start": "nodemon --exec babel-node -- ./server.js"
   },
   "dependencies": {
+    "body-parser": "1.15.2",
+    "corser": "^2.0.1",
     "express": "^4.14.0",
     "mongodb": "^2.2.22"
   },
