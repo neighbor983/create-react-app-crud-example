@@ -16,7 +16,9 @@ corserRequestListener = corser.create({
 
 app.use(corserRequestListener);
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 
 var allowCrossDomain = function(req, res, next) {
@@ -25,10 +27,10 @@ var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
     if ('OPTIONS' == req.method) {
-      res.sendStatus(200);
+        res.sendStatus(200);
     }
     else {
-      next();
+        next();
     }
 };
 
@@ -56,14 +58,14 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
     });
 
     app.post('/api/games', (req, res) => {
-        corserRequestListener(req, res, function () {
-    if (req.method === "OPTIONS") {
-        // End CORS preflight request.
-        res.writeHead(204);
-        res.end();
-    } 
-});
-        
+        corserRequestListener(req, res, function() {
+            if (req.method === "OPTIONS") {
+                // End CORS preflight request.
+                res.writeHead(204);
+                res.end();
+            }
+        });
+
         const {
             errors,
             isValid
@@ -105,7 +107,6 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
             }
         });
     });
-
 
     app.listen(Port, () => console.log("listening on port " + Port));
 
