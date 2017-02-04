@@ -1,4 +1,5 @@
 export const SET_GAMES = 'SET_GAMES';
+export const ADD_GAME = 'ADD_GAME';
 
 export function setGames(games) {
     return {
@@ -18,6 +19,14 @@ function handleResponse(response) {
     }
 }
 
+export function addGame(game){
+    return{
+        type: ADD_GAME,
+        game
+    }
+    
+}
+
 export function saveGame(data) {
     const url = 'https://create-react-app-example-neighbor983.c9users.io:8080/api/games';
     return dispatch => {
@@ -27,7 +36,8 @@ export function saveGame(data) {
             headers: {
                 "Content-Type": "application/json"
             }
-        }).then(handleResponse);
+        }).then(handleResponse)
+        .then(data => dispatch(addGame(data.game)));
     };
 }
 
