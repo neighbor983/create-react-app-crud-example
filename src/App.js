@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import logo from './logo.svg';
 import { Link, Match } from 'react-router';
 import GamesPage from './GamesPage';
 import GameForm from './GameForm';
@@ -17,6 +16,7 @@ class App extends Component {
 
         <Match exactly pattern="/games" component={GamesPage} />
         <Match pattern="/games/new" component={GameForm} />
+        <Match pattern="/game/:_id" component={GameForm} />
       </div>
     );
   }
