@@ -2,6 +2,7 @@ export const SET_GAMES = 'SET_GAMES';
 export const ADD_GAME = 'ADD_GAME';
 export const GAME_FETCHED = 'GAME_FETCHED';
 export const GAME_UPDATED = 'GAME_UPDATED';
+export const GAME_DELETED = 'GAME_DELETED';
 
 
 function handleResponse(response) {
@@ -43,6 +44,13 @@ export function gameUpdated(game) {
     }
 }
 
+export function gameDeleted(gameId) {
+    return {
+        type: GAME_DELETED,
+        gameId
+    }
+}
+
 
 export function saveGame(data) {
     const url = 'https://create-react-app-example-neighbor983.c9users.io:8080/api/games';
@@ -72,6 +80,18 @@ export function updateGame(data) {
     };
 }
 
+export function deleteGame(id) {
+    const url = `https://create-react-app-example-neighbor983.c9users.io:8080/api/games/${id}`;
+    return dispatch => {
+        return fetch(url, {
+                method: 'delete',
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(handleResponse)
+            .then(data => dispatch(gameDeleted(id)));
+    };
+}
 
 export function fetchGames() {
     const url = 'https://create-react-app-example-neighbor983.c9users.io:8080/api/games';
@@ -85,7 +105,7 @@ export function fetchGames() {
 export function fetchGame(id) {
     const url = `https://create-react-app-example-neighbor983.c9users.io:8080/api/games/${id}`;
     return dispatch => {
-        fetch(url )
+        fetch(url)
             .then(res => res.json())
             .then(data => dispatch(gameFetched(data.game)));
     }

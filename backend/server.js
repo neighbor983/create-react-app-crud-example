@@ -48,9 +48,11 @@ function validate(data) {
 }
 
 mongodb.MongoClient.connect(dbUrl, function(err, db) {
+    
+    let gameDB = db.collection('games');
 
     app.get('/api/games', (req, res) => {
-        db.collection('games').find({}).toArray((err, games) => {
+        gameDB.find({}).toArray((err, games) => {
             res.json({
                 games
             });
@@ -75,7 +77,7 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
                 title,
                 cover
             } = req.body;
-            db.collection('games').insert({
+            gameDB.insert({
                 title,
                 cover
             }, (err, result) => {
@@ -101,7 +103,7 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
     });
 
     app.get('/api/games/:_id', (req, res) => {
-        db.collection('games').findOne({
+        gameDB.findOne({
             _id: new mongodb.ObjectId(req.params._id)
         }, (err, game) => {
             res.json({
@@ -121,7 +123,7 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
                 title,
                 cover
             } = req.body;
-            db.collection('games').findOneAndUpdate({
+            gameDB.findOneAndUpdate({
                     _id: new mongodb.ObjectId(req.params._id)
                 }, {
                     $set: {
@@ -152,6 +154,23 @@ mongodb.MongoClient.connect(dbUrl, function(err, db) {
                 errors
             });
         }
+    })
+
+    app.delete('/api/games/:_id', (req, res) => {
+        gameDB.deleteOne({
+                _id: new mongodb.ObjectId(req.params._id)
+            },
+            (err, r) => {
+                if (err) {
+                    res.status(500).json({
+                        errors: {
+                            global: errors
+                        }
+                    });
+                    return;
+                }
+                res.json({});
+            })
     })
 
     app.use((req, res) => {
