@@ -10,8 +10,8 @@ export default function GamesList({
 
     const gamesList = (
         <div className="ui four cards">
-            {games.map( game => <GameCard game={game} key={game._id}/>)}
-        </div>
+      { games.map(game => <GameCard game={game} key={game._id} />) }
+    </div>
     );
 
     return (
